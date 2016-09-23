@@ -13,19 +13,19 @@
         this.name = name;
         let self = this;
 
-        // Создаем публичный метод (приетствие)
-        this.sayHi = ()=> alert( `From sayHi: Hello, I am ${self.name}` );
-
         // Создаем приватный метод получения имени пользователя
-        let getName = ()=> alert( `From autoGreeting: This is ${self.name}` );
+        this._getName = ()=> alert( `From autoGreeting: This is ${self.name}` );
+
 
         // Создаем публичный метод (автоприветствие по таймету)
-        this.autoGreeting = (seconds = 3)=> setTimeout( getName, seconds*1000 );
+        this.autoGreeting = (seconds = 3)=> setTimeout( this._getName, seconds*1000 );
     }
+
+    User.prototype.sayHi = ()=> alert( `From sayHi: Hello, I am ${self.name}` );
 
     let user = new User('Tim');
     user.sayHi();
-    //user.autoGreeting(1);
+    user.autoGreeting(1);
     user.autoGreeting();
 
 </script>
