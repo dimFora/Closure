@@ -12,41 +12,63 @@
     function User(name, position = 'user') {
         this.name = name;
         this.position = position;
-        let self = this;
-
-        // Создаем публичный метод (приетствие)
-        this.sayHi = ()=> alert( `Hello, I am ${self.position} ${self.name}` );
-
-        // Создаем приватный метод получения имени пользователя
-    //    let getName = ()=>
-     //           alert( `From autoGreeting: This is ${self.position} ${self.name}` );
-
-        // Создаем публичный метод (автоприветствие по таймету)
-    //    this.autoGreeting = (seconds = 3)=> setTimeout( getName, seconds*1000 );
-
-        this.saybadWords = (strings)=> alert(`${self.position} ${self.name} said: ${strings}`);
     }
 
+    User.prototype = {
+        // Создаем приватный метод получения позиции
+        _getPos: function () {
+            return this.position;
+        },
+        // Создаем приватный метод получения имени
+        _getName: function() {
+            return this.name;
+        },
+        // Создаем публичный метод (приетствие)
+        sayHi: function() {
+            alert(`Hello, I am ${this._getPos()} ${this._getName()}`);
+        },
+        // Создаем публичный метод (ругань)
+        saybadWords: function (strings) {
+          alert(`${this._getPos()} ${this._getName()} said: ${strings}`);
+        },
+        // Создаем приватный метод автоприветствия
+        _getGreeeting: function () {
+            alert(`autoGreeting: This is ${this._getPos()} ${this._getName()}`);
+        },
+        // Создаем публичный метод (автоприветствие по таймету)
+        autoGreeting: function (seconds = 3) {
+            setTimeout(this._getGreeeting.bind(this), seconds*1000)
+        }
+    };
+
     let tim = new User('Tim');
-    tim.sayHi('user');
+    tim.sayHi();
     tim.saybadWords('Жопа всем)');
-    //user.autoGreeting(1);
-    //user.autoGreeting();
+    tim.autoGreeting(1);
 
     function Admin(name) {
         // Создаем функциональное наследование
         User.apply(this, arguments);
-
-        // Создаем публичный метод
-        this.kickOf = (obj)=>
-             alert(`From ${this.position} ${this.name}: ...bye-bye, ${obj.position} ${obj.name}`);
     }
+
+    // Создаем публичный метод для админа
+    Admin.prototype = {
+       kickOf: function (obj) {
+           alert(`INFO: ${obj.position} ${obj.name} was kick from the server by ${this._getPos()} ${this._getName()}`);
+           }
+    };
+    // Наследуемся от родителя
+    Admin.prototype.__proto__ = User.prototype;
 
     let misha = new Admin('Misha', 'admin');
     misha.sayHi();
     misha.saybadWords('Умри демон!');
     misha.kickOf(tim);
-    //misha.autoGreeting(2);
+//    misha.autoGreeting(2);
+
+    let vasya = new User('Vasya');
+    vasya.saybadWords('Чё за нах!!!');
+    misha.kickOf(vasya);
 
 </script>
 </body>
