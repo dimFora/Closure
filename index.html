@@ -9,31 +9,44 @@
     "use strict";
 
     //Создаем конструктор User
-    function User(name) {
+    function User(name, position = 'user') {
         this.name = name;
+        this.position = position;
         let self = this;
 
         // Создаем публичный метод (приетствие)
-        this.sayHi = ()=> alert( `From sayHi: Hello, I am ${self.name}` );
+        this.sayHi = ()=> alert( `Hello, I am ${self.position} ${self.name}` );
 
         // Создаем приватный метод получения имени пользователя
-        let getName = ()=> alert( `From autoGreeting: This is ${self.name}` );
+    //    let getName = ()=>
+     //           alert( `From autoGreeting: This is ${self.position} ${self.name}` );
 
         // Создаем публичный метод (автоприветствие по таймету)
-        this.autoGreeting = (seconds = 3)=> setTimeout( getName, seconds*1000 );
+    //    this.autoGreeting = (seconds = 3)=> setTimeout( getName, seconds*1000 );
+
+        this.saybadWords = (strings)=> alert(`${self.position} ${self.name} said: ${strings}`);
     }
 
-    let user = new User('Tim');
-    user.sayHi();
-    user.autoGreeting(1);
+    let tim = new User('Tim');
+    tim.sayHi('user');
+    tim.saybadWords('Жопа всем)');
+    //user.autoGreeting(1);
     //user.autoGreeting();
 
     function Admin(name) {
-        User.call(this, name);
+        // Создаем функциональное наследование
+        User.apply(this, arguments);
 
-        this.sayBye = ()=> alert(`From sayBye`)
+        // Создаем публичный метод
+        this.kickOf = (obj)=>
+             alert(`From ${this.position} ${this.name}: ...bye-bye, ${obj.position} ${obj.name}`);
     }
 
+    let misha = new Admin('Misha', 'admin');
+    misha.sayHi();
+    misha.saybadWords('Умри демон!');
+    misha.kickOf(tim);
+    //misha.autoGreeting(2);
 
 </script>
 </body>
